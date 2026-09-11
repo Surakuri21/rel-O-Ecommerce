@@ -1,5 +1,8 @@
-node_modules/
-.next/
-dist/
-build/
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.DS_Store
+logs
 *.log
