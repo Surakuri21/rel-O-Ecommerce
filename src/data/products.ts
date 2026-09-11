@@ -32,11 +32,11 @@ const WATCH_IMG = {
     'https://images.unsplash.com/photo-1600003014637-ff82a275e191?w=800&q=80',
     'https://images.unsplash.com/photo-1587925358603-c2eea5305bbc?w=800&q=80',
     'https://images.unsplash.com/photo-1548169874-53e85f753f1e?w=800&q=80',
-    'https://images.unsplash.com/photo-4R_WEmhx8og?w=800&q=80',
+    'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&q=80',
   ],
   dress: [
     'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?w=800&q=80',
-    'https://images.unsplash.com/photo-2NIAbGMjdR0-2f7b0c26856d?w=800&q=80',
+    'https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?w=800&q=80',
     'https://images.unsplash.com/photo-1620625515032-6ed0c1750c75?w=800&q=80',
     'https://images.unsplash.com/photo-1618215650148-e8e61eae521c?w=800&q=80',
   ],
