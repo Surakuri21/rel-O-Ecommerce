@@ -48,17 +48,17 @@ export default function Header() {
   return (
     <>
       {/* Announcement Bar */}
-      <div className="bg-obsidian text-ivory text-center py-2 text-xs tracking-[0.2em] uppercase font-sans">
+      <div className="bg-obsidian/95 backdrop-blur-sm text-ivory/90 text-center py-2 text-[10px] tracking-[0.25em] uppercase font-sans border-b border-white/5">
         Complimentary Express Shipping — Orders Over $5,000
       </div>
 
       {/* Main Header */}
-      <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ivory/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
+      <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ivory/95 backdrop-blur-md shadow-sm' : 'bg-black/20 backdrop-blur-[10px] border-b border-white/5'}`}>
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Mobile Menu Button */}
             <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2" aria-label="Open menu">
-              <Menu size={22} className={scrolled ? 'text-obsidian' : 'text-obsidian'} />
+              <Menu size={22} className={scrolled ? 'text-obsidian' : 'text-white/90'} />
             </button>
 
             {/* Navigation - Desktop */}
@@ -67,7 +67,7 @@ export default function Header() {
                 <div key={link.path} className="relative"
                   onMouseEnter={() => link.hasMega && setMegaMenu(true)}
                   onMouseLeave={() => setMegaMenu(false)}>
-                  <Link to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-colors hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-obsidian'}`}>
+                  <Link to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
                     {link.label}
                     {link.hasMega && <ChevronDown size={12} className="inline ml-1" />}
                   </Link>
@@ -77,15 +77,15 @@ export default function Header() {
 
             {/* Logo */}
             <Link to="/" className="absolute left-1/2 -translate-x-1/2 lg:relative lg:left-0 lg:translate-x-0">
-              <h1 className={`font-serif text-2xl lg:text-3xl tracking-[0.3em] font-light ${scrolled ? 'text-obsidian' : 'text-obsidian'}`}>
-                AURELIS
+              <h1 className={`font-serif text-2xl lg:text-3xl tracking-[0.3em] font-light transition-colors duration-300 ${scrolled ? 'text-obsidian' : 'text-white'}`} style={!scrolled ? { textShadow: '0 1px 3px rgba(0,0,0,0.4)' } : {}}>
+                SURAKURI
               </h1>
             </Link>
 
             {/* Right Navigation */}
             <nav className="hidden lg:flex items-center gap-6">
               {navLinks.slice(4).map(link => (
-                <Link key={link.path} to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-colors hover:text-champagne`}>
+                <Link key={link.path} to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
                   {link.label}
                 </Link>
               ))}
@@ -93,13 +93,13 @@ export default function Header() {
 
             {/* Icons */}
             <div className="flex items-center gap-4">
-              <button onClick={() => setSearchOpen(true)} className="p-2 hover:text-champagne transition-colors" aria-label="Search">
+              <button onClick={() => setSearchOpen(true)} className={`p-2 transition-colors ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Search">
                 <Search size={18} />
               </button>
-              <Link to="/account" className="p-2 hover:text-champagne transition-colors hidden sm:block" aria-label="Account">
+              <Link to="/account" className={`p-2 transition-colors hidden sm:block ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Account">
                 <User size={18} />
               </Link>
-              <Link to="/wishlist" className="p-2 hover:text-champagne transition-colors relative" aria-label="Wishlist">
+              <Link to="/wishlist" className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Wishlist">
                 <Heart size={18} />
                 {wishlistCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">
@@ -107,7 +107,7 @@ export default function Header() {
                   </span>
                 )}
               </Link>
-              <button onClick={() => setCartOpen(true)} className="p-2 hover:text-champagne transition-colors relative" aria-label="Cart">
+              <button onClick={() => setCartOpen(true)} className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Cart">
                 <ShoppingBag size={18} />
                 {totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">

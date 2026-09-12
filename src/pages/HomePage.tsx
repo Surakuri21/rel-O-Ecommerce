@@ -28,51 +28,86 @@ export default function HomePage() {
     <div className="overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div ref={heroRef} className="absolute inset-0">
+        {/* Hero Image with Subtle Scale Animation */}
+        <motion.div
+          ref={heroRef}
+          initial={{ scale: 1.03 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 8, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
           <img
-            src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920&q=80"
+            src="/images/hero/watch.jpg"
             alt="Luxury watch"
-            className="w-full h-full object-cover scale-110"
+            className="w-full h-full object-cover"
             style={{ objectPosition: 'center' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-6 max-w-4xl">
+
+          {/* Layered Gradients for Readability */}
+          {/* Horizontal gradient: stronger on left/center, lighter on right */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.20) 40%, rgba(0,0,0,0.08) 70%, rgba(0,0,0,0.15) 100%)'
+            }}
+          />
+          {/* Vertical gradient: subtle top and bottom darkening */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.02) 35%, rgba(0,0,0,0.02) 65%, rgba(0,0,0,0.30) 100%)'
+            }}
+          />
+        </motion.div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-6 max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[10px] tracking-[0.4em] uppercase mb-6 text-champagne"
+            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            className="text-[10px] tracking-[0.45em] uppercase mb-8 text-champagne/90"
+            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
           >
             Introducing the 2024 Collection
           </motion.p>
+
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-[0.1em] mb-6 font-light"
+            transition={{ duration: 1.1, delay: 0.6, ease: "easeOut" }}
+            className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.15em] mb-8 font-light text-white/95"
+            style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}
           >
             TIME, REFINED.
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-sm md:text-base text-white/80 max-w-xl mx-auto mb-10 leading-relaxed font-light"
+            transition={{ duration: 0.9, delay: 0.9, ease: "easeOut" }}
+            className="text-sm md:text-base text-white/75 max-w-md mx-auto mb-12 leading-[1.7] font-light"
+            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
           >
             Exceptional craftsmanship. Timeless design. Precision engineered for those who appreciate every second.
           </motion.p>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
+            transition={{ duration: 0.9, delay: 1.2, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link to="/shop" className="bg-white text-obsidian px-8 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-champagne transition-colors duration-300">
+            <Link
+              to="/shop"
+              className="bg-white/95 backdrop-blur-sm text-obsidian px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-white hover:shadow-lg transition-all duration-300 border border-white/20"
+            >
               Explore Collection
             </Link>
-            <Link to="/about" className="border border-white/50 text-white px-8 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-white hover:text-obsidian transition-colors duration-300">
+            <Link
+              to="/about"
+              className="bg-white/5 backdrop-blur-sm border border-white/30 text-white/90 px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-white/10 hover:border-white/50 transition-all duration-300"
+            >
               Discover Our Story
             </Link>
           </motion.div>
@@ -82,8 +117,8 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/60"
+          transition={{ delay: 1.8, duration: 0.8 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"
         >
           <ChevronDown size={24} className="animate-bounce" />
         </motion.div>
@@ -146,7 +181,7 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <img
-              src="https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=800&q=80"
+              src="https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=800&q=80&auto=format&fit=crop"
               alt="Watch craftsmanship"
               className="w-full aspect-[4/5] object-cover"
             />
@@ -161,12 +196,12 @@ export default function HomePage() {
             <p className="text-[10px] tracking-[0.3em] uppercase text-champagne">Our Philosophy</p>
             <h2 className="font-serif text-4xl lg:text-5xl leading-tight">Where Precision Meets Artistry</h2>
             <p className="text-warm-gray leading-relaxed">
-              Each AURELIS timepiece is the culmination of hundreds of hours of meticulous craftsmanship. 
-              From the hand-finished movement to the perfectly polished case, every detail is considered, 
+              Each AURELIS timepiece is the culmination of hundreds of hours of meticulous craftsmanship.
+              From the hand-finished movement to the perfectly polished case, every detail is considered,
               every surface refined to perfection.
             </p>
             <p className="text-warm-gray leading-relaxed">
-              Our master watchmakers train for years before they are entrusted with the creation of a single 
+              Our master watchmakers train for years before they are entrusted with the creation of a single
               timepiece, ensuring that every watch that bears the AURELIS name meets our exacting standards.
             </p>
             <Link to="/about" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors pt-4">
@@ -245,23 +280,26 @@ export default function HomePage() {
       {/* Limited Edition Banner */}
       <section className="relative py-32 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=1920&q=80"
+          src="https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?w=1920&q=80&auto=format&fit=crop"
           alt="Limited edition"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Layered Gradients */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.20) 50%, rgba(0,0,0,0.35) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.30) 100%)' }} />
         <div className="relative z-10 text-center text-white px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.9 }}
           >
-            <p className="text-[10px] tracking-[0.3em] uppercase text-champagne mb-4">Exclusive</p>
-            <h2 className="font-serif text-4xl lg:text-6xl tracking-wide mb-6">Limited Edition</h2>
-            <p className="text-white/70 max-w-lg mx-auto mb-8">
+            <p className="text-[10px] tracking-[0.4em] uppercase text-champagne/90 mb-4" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>Exclusive</p>
+            <h2 className="font-serif text-4xl lg:text-6xl tracking-[0.12em] mb-6 font-light text-white/95" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>Limited Edition</h2>
+            <p className="text-white/70 max-w-lg mx-auto mb-8 leading-[1.7]" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
               Only a select few will own these masterpieces. Each piece is individually numbered and comes with a certificate of authenticity.
             </p>
-            <Link to="/shop?badge=limited" className="bg-champagne text-obsidian px-8 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-gold-light transition-colors">
+            <Link to="/shop?badge=limited" className="inline-block bg-champagne/95 backdrop-blur-sm text-obsidian px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-champagne hover:shadow-lg transition-all duration-300 border border-champagne/20">
               Discover Limited Editions
             </Link>
           </motion.div>
@@ -283,9 +321,9 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { name: 'James W.', text: 'The Sovereign Chronograph is a masterpiece. The finishing is impeccable and the movement is remarkably smooth.', rating: 5 },
-              { name: 'Sarah M.', text: 'I have been collecting for 20 years. AURELIS represents the pinnacle of modern watchmaking. Extraordinary attention to detail.', rating: 5 },
-              { name: 'David L.', text: 'The GMT function is incredibly intuitive. Perfect for my travels between continents. A true companion.', rating: 5 },
+              { name: 'Paterno T.', text: 'The Sovereign Chronograph is a masterpiece. The finishing is impeccable and the movement is remarkably smooth.', rating: 5 },
+              { name: 'Minah Q.', text: 'I have been collecting for 20 years. AURELIS represents the pinnacle of modern watchmaking. Extraordinary attention to detail.', rating: 5 },
+              { name: 'Adrian C.', text: 'The GMT function is incredibly intuitive. Perfect for my travels between continents. A true companion.', rating: 5 },
             ].map((review, i) => (
               <motion.div
                 key={i}

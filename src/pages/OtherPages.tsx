@@ -10,13 +10,22 @@ export function NewArrivalsPage() {
     <div className="pt-28 lg:pt-32 pb-24">
       {/* Hero */}
       <section className="relative h-[50vh] flex items-center justify-center overflow-hidden mb-16">
-        <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=1920&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/40" />
+        <motion.img
+          initial={{ scale: 1.03 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 6, ease: "easeOut" }}
+          src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=1920&q=80&auto=format&fit=crop"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Layered Gradients */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(90deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.30) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.35) 100%)' }} />
         <div className="relative z-10 text-center text-white px-6">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-[10px] tracking-[0.4em] uppercase text-champagne mb-4">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-[10px] tracking-[0.45em] uppercase text-champagne/90 mb-4" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
             The Latest
           </motion.p>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-serif text-5xl lg:text-7xl tracking-wide">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 1 }} className="font-serif text-4xl sm:text-5xl lg:text-6xl tracking-[0.12em] font-light text-white/95" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
             THE NEXT ERA OF TIME
           </motion.h1>
         </div>
