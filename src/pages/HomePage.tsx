@@ -196,13 +196,13 @@ export default function HomePage() {
             <p className="text-[10px] tracking-[0.3em] uppercase text-champagne">Our Philosophy</p>
             <h2 className="font-serif text-4xl lg:text-5xl leading-tight">Where Precision Meets Artistry</h2>
             <p className="text-warm-gray leading-relaxed">
-              Each AURELIS timepiece is the culmination of hundreds of hours of meticulous craftsmanship.
+              Each SURAKURI timepiece is the culmination of hundreds of hours of meticulous craftsmanship.
               From the hand-finished movement to the perfectly polished case, every detail is considered,
               every surface refined to perfection.
             </p>
             <p className="text-warm-gray leading-relaxed">
               Our master watchmakers train for years before they are entrusted with the creation of a single
-              timepiece, ensuring that every watch that bears the AURELIS name meets our exacting standards.
+              timepiece, ensuring that every watch that bears the SURAKURI name meets our exacting standards.
             </p>
             <Link to="/about" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors pt-4">
               Our Heritage <ArrowRight size={14} />
@@ -322,7 +322,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { name: 'Paterno T.', text: 'The Sovereign Chronograph is a masterpiece. The finishing is impeccable and the movement is remarkably smooth.', rating: 5 },
-              { name: 'Minah Q.', text: 'I have been collecting for 20 years. AURELIS represents the pinnacle of modern watchmaking. Extraordinary attention to detail.', rating: 5 },
+              { name: 'Minah Q.', text: 'I have been collecting for 20 years. SURAKURI represents the pinnacle of modern watchmaking. Extraordinary attention to detail.', rating: 5 },
               { name: 'Adrian C.', text: 'The GMT function is incredibly intuitive. Perfect for my travels between continents. A true companion.', rating: 5 },
             ].map((review, i) => (
               <motion.div
@@ -357,7 +357,7 @@ export default function HomePage() {
           <p className="text-[10px] tracking-[0.3em] uppercase text-champagne mb-4">Begin Your Journey</p>
           <h2 className="font-serif text-4xl lg:text-5xl tracking-wide mb-6">Find Your Timepiece</h2>
           <p className="text-warm-gray max-w-lg mx-auto mb-8">
-            Whether you seek a daily companion or a collector's treasure, discover the AURELIS that speaks to you.
+            Whether you seek a daily companion or a collector's treasure, discover the SURAKURI that speaks to you.
           </p>
           <Link to="/shop" className="bg-obsidian text-ivory px-10 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-charcoal transition-colors">
             Shop All Watches

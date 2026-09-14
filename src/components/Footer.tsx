@@ -86,8 +86,8 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-serif text-lg tracking-[0.3em]">AURELIS</p>
-          <p className="text-xs text-warm-gray">© 2024 Aurelis. All rights reserved. Time, Refined.</p>
+          <p className="font-serif text-lg tracking-[0.3em]">SURAKURI</p>
+          <p className="text-xs text-warm-gray">© 2024 SURAKURI. All rights reserved. Time, Refined.</p>
           <div className="flex items-center gap-4 text-xs text-warm-gray">
             <span>Secure Checkout</span>
             <span>•</span>

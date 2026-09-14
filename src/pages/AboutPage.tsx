@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function AboutPage() {
   const timeline = [
-    { year: '1987', title: 'The Beginning', desc: 'Founded in Geneva by master horologist Henri Aurelis with a vision to create timepieces of unparalleled beauty.' },
+    { year: '1987', title: 'The Beginning', desc: 'Founded in Zamboanga City by Software Developer & AI Engineer Adrian Carl Caerlang who also a watch enthusiast with a vision to create timepieces of unparalleled beauty.' },
     { year: '1998', title: 'First Manufacture', desc: 'Opened our first in-house movement manufacture, producing entirely original calibres.' },
     { year: '2008', title: 'Global Recognition', desc: 'Awarded the Grand Prix d\'Horlogerie for our revolutionary tourbillon movement.' },
     { year: '2017', title: 'New Horizons', desc: 'Launched our sustainable initiative, using recycled precious metals and ethical sourcing.' },
@@ -29,7 +29,7 @@ export default function AboutPage() {
             <p className="text-[10px] tracking-[0.3em] uppercase text-champagne mb-4">Our Philosophy</p>
             <h2 className="font-serif text-3xl lg:text-4xl tracking-wide mb-8">The Pursuit of Perfection</h2>
             <p className="text-warm-gray leading-relaxed text-lg">
-              At AURELIS, we believe that a timepiece is more than an instrument for measuring time — it is a statement of values, 
+              At SURAKURI, we believe that a timepiece is more than an instrument for measuring time — it is a statement of values, 
               a companion through life's most meaningful moments, and a legacy to be passed through generations.
             </p>
           </motion.div>
@@ -46,13 +46,13 @@ export default function AboutPage() {
             <p className="text-[10px] tracking-[0.3em] uppercase text-champagne">Craftsmanship</p>
             <h2 className="font-serif text-3xl lg:text-4xl tracking-wide">Every Detail Matters</h2>
             <p className="text-warm-gray leading-relaxed">
-              Each AURELIS movement is assembled by a single master watchmaker over the course of several weeks. 
+              Each SURAKURI movement is assembled by a single master watchmaker over the course of several weeks. 
               From the hand-beveling of each bridge to the precise regulation of the escapement, 
               no detail is too small to deserve attention.
             </p>
             <p className="text-warm-gray leading-relaxed">
               Our artisans train for a minimum of seven years before they are entrusted with the creation of a complete movement. 
-              This dedication to mastery ensures that every AURELIS timepiece meets our exacting standards of excellence.
+              This dedication to mastery ensures that every SURAKURI timepiece meets our exacting standards of excellence.
             </p>
             <div className="grid grid-cols-3 gap-6 pt-6">
               <div className="text-center">
