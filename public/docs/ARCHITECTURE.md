@@ -6,86 +6,54 @@
 
 ## 🏗️ Architecture Overview
 
-### High-Level Architecture
+### High-Level Architecture (Islands Architecture)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│                        Client Layer                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │   React UI   │  │   Routing    │  │   State Mgmt │      │
-│  │  (Components)│  │(React Router)│  │  (Context)   │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│                    Astro Server/Static Layer                │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │ File Routing │  │ Base Layouts │  │ SEO & Meta   │       │
+│  │ (.astro)     │  │ (.astro)     │  │ Generation   │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
 └─────────────────────────────────────────────────────────────┘
-                            ↓
+                            ↓ (Hydrates only when needed)
 ┌─────────────────────────────────────────────────────────────┐
-│                      Data Layer                              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │  Product Data│  │   Local      │  │   External   │      │
-│  │  (Static)    │  │   Storage    │  │   APIs       │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│                 React Interactive Islands                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │   UI Comps   │  │ State Mgmt   │  │ Client Logic │       │
+│  │ (.tsx)       │  │ (Context)    │  │ (Hooks)      │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
 └─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    External Services                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │   Unsplash   │  │   Google     │  │   Payment    │      │
-│  │   (Images)   │  │   Fonts      │  │   (Future)   │      │
-│  └──────────────┘  └──────────────┘  └──────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-aurelis/
-├── public/                    # Static assets
-│   └── images/               # Image assets
-│       ├── hero/             # Hero section images
-│       ├── editorial/        # Editorial content images
-│       ├── collections/      # Collection images
-│       ├── blog/             # Blog post images
-│       └── watches/          # Product images (if local)
-│
-├── src/                      # Source code
-│   ├── components/           # Reusable UI components
-│   │   ├── Header.tsx        # Site header with navigation
-│   │   ├── Footer.tsx        # Site footer
-│   │   ├── ProductCard.tsx   # Product display card
-│   │   ├── CompareDrawer.tsx # Product comparison UI
-│   │   ├── MobileNav.tsx     # Mobile navigation
-│   │   └── Shared.tsx        # Shared components (Toast, etc.)
-│   │
-│   ├── pages/                # Route-level components
-│   │   ├── HomePage.tsx      # Landing page
-│   │   ├── ShopPage.tsx      # Product catalog
-│   │   ├── ProductPage.tsx   # Product detail
-│   │   ├── CartPage.tsx      # Shopping cart
-│   │   ├── CheckoutPage.tsx  # Checkout flow
-│   │   ├── WishlistPage.tsx  # Wishlist
-│   │   ├── AccountPage.tsx   # User account
-│   │   ├── AboutPage.tsx     # About/brand story
-│   │   ├── JournalPage.tsx   # Blog/editorial
-│   │   ├── CollectionsPage.tsx # Collections
-│   │   └── OtherPages.tsx    # New arrivals, bestsellers, 404
-│   │
-│   ├── store/                # State management
-│   │   └── StoreContext.tsx  # Global state context
-│   │
-│   ├── data/                 # Static data & types
-│   │   └── products.ts       # Product data & types
-│   │
-│   ├── App.tsx               # Root component & routing
-│   ├── main.tsx              # App entry point
-│   └── index.css             # Global styles & Tailwind
-│
-├── index.html                # HTML template
-├── package.json              # Dependencies & scripts
-├── tsconfig.json             # TypeScript configuration
-├── vite.config.ts            # Vite configuration
-└── tailwind.config.js        # Tailwind configuration
-```
+
+Surakuri-rel-O/
+├── public/ # Static assets (Images, Fonts)
+├── src/  
+│ ├── components/ # React Islands & Pure UI
+│ │ ├── Header.tsx  
+│ │ ├── ProductCard.tsx  
+│ │ └── CartDrawer.tsx  
+│ │
+│ ├── layouts/ # Astro Layout Wrappers (NEW)
+│ │ ├── BaseLayout.astro  
+│ │ └── ShopLayout.astro  
+│ │
+│ ├── pages/ # Astro File-Based Routing
+│ │ ├── index.astro # Replaces HomePage.tsx
+│ │ ├── shop/
+│ │ │ └── index.astro # Replaces ShopPage.tsx
+│ │ ├── product/
+│ │ │ └── [slug].astro # Dynamic product routes
+│ │ └── cart.astro  
+│ │
+│ ├── store/ # React Context for Islands
+│ ├── data/ # Static data & types
+│ └── index.css # Global Tailwind styles
 
 ---
 
@@ -94,73 +62,72 @@ aurelis/
 ### State Management Architecture
 
 ```
+
 ┌─────────────────────────────────────────┐
-│         StoreContext (Provider)          │
-│  ┌───────────────────────────────────┐  │
-│  │         Global State              │  │
-│  │  ┌─────────┐  ┌──────────────┐  │  │
-│  │  │  Cart   │  │  Wishlist    │  │  │
-│  │  └─────────┘  └──────────────┘  │  │
-│  │  ┌─────────┐  ┌──────────────┐  │  │
-│  │  │Recently │  │   Compare    │  │  │
-│  │  │ Viewed  │  │    List      │  │  │
-│  │  └─────────┘  └──────────────┘  │  │
-│  │  ┌─────────┐  ┌──────────────┐  │  │
-│  │  │ Search  │  │   Toasts     │  │  │
-│  │  │ History │  │              │  │  │
-│  │  └─────────┘  └──────────────┘  │  │
-│  └───────────────────────────────────┘  │
-│                                         │
-│  ┌───────────────────────────────────┐  │
-│  │        useReducer                 │  │
-│  │   (State + Actions → New State)   │  │
-│  └───────────────────────────────────┘  │
-│                                         │
-│  ┌───────────────────────────────────┐  │
-│  │      localStorage (Persistence)   │  │
-│  └───────────────────────────────────┘  │
+│ StoreContext (Provider) │
+│ ┌───────────────────────────────────┐ │
+│ │ Global State │ │
+│ │ ┌─────────┐ ┌──────────────┐ │ │
+│ │ │ Cart │ │ Wishlist │ │ │
+│ │ └─────────┘ └──────────────┘ │ │
+│ │ ┌─────────┐ ┌──────────────┐ │ │
+│ │ │Recently │ │ Compare │ │ │
+│ │ │ Viewed │ │ List │ │ │
+│ │ └─────────┘ └──────────────┘ │ │
+│ │ ┌─────────┐ ┌──────────────┐ │ │
+│ │ │ Search │ │ Toasts │ │ │
+│ │ │ History │ │ │ │ │
+│ │ └─────────┘ └──────────────┘ │ │
+│ └───────────────────────────────────┘ │
+│ │
+│ ┌───────────────────────────────────┐ │
+│ │ useReducer │ │
+│ │ (State + Actions → New State) │ │
+│ └───────────────────────────────────┘ │
+│ │
+│ ┌───────────────────────────────────┐ │
+│ │ localStorage (Persistence) │ │
+│ └───────────────────────────────────┘ │
 └─────────────────────────────────────────┘
+
 ```
 
 ### Data Flow Pattern
 
 ```
+
 User Action
-    ↓
+↓
 Component dispatch(action)
-    ↓
+↓
 Reducer processes action
-    ↓
+↓
 New state created
-    ↓
+↓
 Context updates
-    ↓
+↓
 Components re-render
-    ↓
+↓
 localStorage updated (if persistent)
+
 ```
 
 ---
 
 ## 🧭 Routing Architecture
 
-### Route Structure
+### File-Based Route Structure
 
-```typescript
-/                           → HomePage
-/shop                       → ShopPage
-/product/:slug              → ProductPage
-/cart                       → CartPage
-/checkout                   → CheckoutPage
-/wishlist                   → WishlistPage
-/account                    → AccountPage
-/collections                → CollectionsPage (index)
-/collections/:slug          → CollectionsPage (detail)
-/new-arrivals               → NewArrivalsPage
-/best-sellers               → BestSellersPage
-/about                      → AboutPage
-/journal                    → JournalPage
-*                           → NotFoundPage (404)
+We utilize Astro's native file-based routing. Do NOT use `react-router-dom` or `BrowserRouter`.
+
+```
+src/pages/index.astro          → /
+src/pages/shop/index.astro     → /shop
+src/pages/product/[slug].astro → /product/:slug
+src/pages/cart.astro           → /cart
+src/pages/checkout.astro       → /checkout
+src/pages/404.astro            → /404
+
 ```
 
 ### Route Hierarchy
@@ -440,37 +407,32 @@ const BREAKPOINTS = {
 
 ## ⚡ Performance Architecture
 
-### Optimization Strategies
+### Partial Hydration (Islands)
 
-```typescript
-// 1. Code Splitting
-const ShopPage = lazy(() => import('./pages/ShopPage'));
+React components are static HTML by default. We use Astro client directives to hydrate them only when necessary, eliminating the need for `React.lazy`.
 
-// 2. Memoization
-const ProductCard = memo(({ product }) => {
-  return <div>{product.name}</div>;
-});
+```astro
+// 1. Load immediately (for critical UI like Cart)
+<CartDrawer client:load/>
 
-// 3. Lazy Loading
-<img loading="lazy" src="..." alt="..." />
+// 2. Load when visible (for below-the-fold interactive elements)
+<ProductGallery client:visible/>
 
-// 4. Image Optimization
-<img
-  src="image-800w.jpg"
-  srcSet="image-400w.jpg 400w, image-800w.jpg 800w"
-  sizes="(max-width: 768px) 100vw, 50vw"
-  alt="..."
-/>
+// 3. Load when browser is idle (for non-critical elements)
+<NewsletterPopup client:idle/>
+
 ```
 
 ### Bundle Structure
 
 ```
+
 dist/
-├── index.html              (1.5 KB)
+├── index.html (1.5 KB)
 └── assets/
-    ├── index-*.css         (42 KB / 8 KB gzipped)
-    └── index-*.js          (422 KB / 122 KB gzipped)
+├── index-_.css (42 KB / 8 KB gzipped)
+└── index-_.js (422 KB / 122 KB gzipped)
+
 ```
 
 ---

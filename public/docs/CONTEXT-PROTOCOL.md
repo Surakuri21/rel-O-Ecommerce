@@ -1,30 +1,24 @@
-# SURAKURI — Context Protocol
-
-> State management and data flow protocol for the SURAKURI luxury watch ecommerce platform.
-
----
-
 ## 🎯 Overview
 
-The SURAKURI platform uses a centralized state management system built on React Context API with the useReducer pattern. This document outlines the state structure, actions, and data flow protocols.
-
----
+SURAKURI uses **Nano Stores** (`@nanostores/react`) for state management. Because we use Astro's Islands Architecture, React Context cannot bridge isolated components. Nano Stores provides framework-agnostic atomic state that can be shared across any UI island.
 
 ## 📦 State Structure
 
-### Global State
+````typescript
+import { atom, map } from 'nanostores';
 
-```typescript
-interface StoreState {
-  cart: CartItem[];
-  wishlist: string[];
-  recentlyViewed: string[];
-  toasts: Toast[];
-  searchHistory: string[];
-  compareList: string[];
-  newsletterPopupShown: boolean;
+// Persistent Cart State
+export const cartStore = map<Record<string, CartItem>>({});
+
+// UI State (Transient)
+export const isCartOpen = atom(false);
+export const isMenuOpen = atom(false);
+
+// Action Example
+export function addToCart(product: Product) {
+  const current = cartStore.get();
+  // Nano store mutation logic...
 }
-```
 
 ### State Descriptions
 
@@ -56,7 +50,7 @@ interface StoreState {
 
 // Clear entire cart
 { type: 'CLEAR_CART' }
-```
+````
 
 ### Wishlist Actions
 

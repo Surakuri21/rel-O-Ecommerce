@@ -6,18 +6,19 @@
 
 ## 🛠️ Core Technologies
 
-### Frontend Framework
+### Meta-Framework: Astro
 
-#### React 18.2.0
+- **Purpose:** Core routing and partial hydration (Islands Architecture).
+- **Architecture:** Static Site Generation (SSG) with zero-JS by default.
 
-```json
-{
-  "name": "react",
-  "version": "^18.2.0",
-  "purpose": "UI component library with concurrent features",
-  "documentation": "https://react.dev"
-}
-```
+### UI Library: React 18.2.0
+
+- **Purpose:** Used strictly for interactive "islands" (e.g., Cart Drawer, Interactive Carousels).
+
+### Styling & Icons
+
+- **CSS:** Tailwind CSS 4.1.7
+- **Icons:** Lucide React 0.294.0
 
 **Key Features Used:**
 

@@ -491,7 +491,7 @@ To provide discerning collectors with an exceptional digital experience that mir
 - React 18
 - TypeScript
 - Vite
-- React Router
+- Astro Router
 - Context API for state
 
 **Acceptance Criteria:**

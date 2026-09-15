@@ -217,37 +217,19 @@ function MyComponent() {
 
 ---
 
-## 🧭 Routing
+## 🧭 Routing Architecture
 
-### Route Configuration
+### Astro File-Based Routing
 
-```typescript
-// src/App.tsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+Do NOT use `react-router-dom`. All pages are built using Astro's directory structure.
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/product/:slug" element={<ProductPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/collections" element={<CollectionsPage />} />
-        <Route path="/collections/:slug" element={<CollectionsPage />} />
-        <Route path="/new-arrivals" element={<NewArrivalsPage />} />
-        <Route path="/best-sellers" element={<BestSellersPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/journal" element={<JournalPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-```
+````typescript
+// Navigation
+<a href="/shop">Shop</a>
+<a href={`/product/${product.slug}`}>{product.name}</a>
+
+// Programmatic Navigation (Client-side islands only)
+window.location.href = '/cart';
 
 ### Navigation
 
@@ -264,7 +246,7 @@ navigate('/cart');
 
 // URL parameters
 const { slug } = useParams();
-```
+````
 
 ---
 

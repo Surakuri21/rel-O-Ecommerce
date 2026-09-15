@@ -90,15 +90,12 @@ Labels:     Inter, uppercase
 
 ---
 
-## 🏗️ Architecture Rules
+### 🏗️ Routing & App Architecture (CRITICAL FOR AI)
 
-### Component Rules
-
-1. **Single Responsibility** — Each component does one thing
-2. **Composition Over Inheritance** — Build complex UIs from simple parts
-3. **Props Over State** — Prefer passing data down, not managing it locally
-4. **Context For Global State** — Cart, wishlist, user preferences
-5. **Local State For UI** — Modals, dropdowns, form inputs
+- **Astro Only:** This project uses Astro for routing and page structure.
+- **Islands Architecture:** React is ONLY used for interactive components requiring state. You MUST use Astro hydration directives (`client:load`, `client:visible`, `client:idle`) when mounting React components.
+- **No Next.js or Vite SPA:** DO NOT use Next.js, Server Components, or `react-router-dom`.
+- **Routing Structure:** Pages are strictly built using `.astro` files in the `src/pages/` directory. React components live in `src/components/`.
 
 ### File Organization
 

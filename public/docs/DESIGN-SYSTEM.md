@@ -484,21 +484,19 @@
   "
   >
     {/* Logo */}
-    <Link to="/" className="font-serif text-2xl tracking-[0.2em]">
+    <a href="/" className="font-serif text-2xl tracking-[0.2em]">
       SURAKURI
-    </Link>
-
+    </a>
     {/* Navigation Links */}
     <div className="hidden lg:flex items-center gap-8">
-      <Link
-        to="/shop"
+      <a
+        href="/shop"
         className="text-[11px] tracking-[0.15em] uppercase hover:text-champagne transition-colors"
       >
         Shop
-      </Link>
+      </a>
     </div>
-
-    {/* Icons */}
+    x{/* Icons */}
     <div className="flex items-center gap-4">
       <button
         aria-label="Search"
