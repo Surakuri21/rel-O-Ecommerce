@@ -71,7 +71,7 @@ Surakuri-rel-O/
 │   ├── pages/             # Route-level components
 │   ├── store/             # State management
 │   ├── data/              # Static data & types
-│   ├── App.tsx            # Root component
+│   ├── layouts/           # Astro Layout wrappers
 │   ├── main.tsx           # Entry point
 │   └── index.css          # Global styles
 ├── index.html             # HTML template
@@ -85,15 +85,15 @@ Surakuri-rel-O/
 
 ## 🛠️ Tech Stack
 
-| Technology    | Version | Purpose      |
-| ------------- | ------- | ------------ |
-| React         | 18.2.0  | UI framework |
-| TypeScript    | 5.7.0   | Type safety  |
-| Vite          | 6.3.5   | Build tool   |
-| Tailwind CSS  | 4.1.7   | Styling      |
-| React Router  | 6.8.0   | Routing      |
-| Framer Motion | 11.16.1 | Animations   |
-| Lucide React  | 0.294.0 | Icons        |
+| Technology    | Version | Purpose       |
+| ------------- | ------- | ------------- |
+| React         | 18.2.0  | UI framework  |
+| TypeScript    | 5.7.0   | Type safety   |
+| Vite          | 6.3.5   | Build tool    |
+| Tailwind CSS  | 4.1.7   | Styling       |
+| Astro         | 6.8.0   | Routing & SSG |
+| Framer Motion | 11.16.1 | Animations    |
+| Lucide React  | 0.294.0 | Icons         |
 
 ---
 

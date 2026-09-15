@@ -121,18 +121,18 @@ src/
 ├── pages/          # Route-level components
 ├── store/          # State management (StoreContext.tsx)
 ├── data/           # Product data (products.ts)
-└── App.tsx         # Root component + routing
+
 ```
 
 ### Routes
 
 ```
-/              → HomePage
-/shop          → ShopPage
-/product/:slug → ProductPage
-/cart          → CartPage
-/checkout      → CheckoutPage
-/wishlist      → WishlistPage
+src/pages/index.astro          → /
+src/pages/shop/index.astro     → /shop
+src/pages/product/[slug].astro → /product/:slug
+src/pages/cart.astro           → /cart
+src/pages/checkout.astro       → /checkout
+src/pages/wishlist.astro       → /wishlist
 ```
 
 ---

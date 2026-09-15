@@ -553,7 +553,7 @@
 
 - [x] Initialize Vite + React + TypeScript project
 - [x] Configure Tailwind CSS
-- [x] Set up React Router
+- [x] Set up Astro file-based routing
 - [x] Configure TypeScript
 - [x] Set up project structure
 - [x] Install dependencies (Framer Motion, Lucide React)
