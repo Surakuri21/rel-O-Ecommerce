@@ -2,6 +2,7 @@
 // src/pages/index.astro
 // This file completely replaces App.tsx and acts as your new root route (/)
 import '../index.css'; // Import your global Tailwind styles
+import Header from '../components/Header';
 ---
 
 <html lang="en">
@@ -10,8 +11,9 @@ import '../index.css'; // Import your global Tailwind styles
     <meta name="viewport" content="width=device-width" />
     <title>SURAKURI | Time, Refined.</title>
   </head>
-  <body class="bg-ivory text-obsidian min-h-screen flex items-center justify-center">
-    <main class="text-center space-y-6 p-8">
+  <body class="bg-ivory text-obsidian min-h-screen">
+    <Header client:load />
+    <main class="text-center space-y-6 p-8 pt-32">
       <h1 class="font-serif text-4xl tracking-[0.15em] font-light">
         SURAKURI
       </h1>

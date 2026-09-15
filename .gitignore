@@ -1,8 +1,79 @@
-node_modules
-dist
-dist-ssr
-*.local
+```
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
 .env
-.DS_Store
-logs
+.env.local
+.env.*
+
+# Logs
 *.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python artifacts (if any Python files exist in project)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache directories
+.cache/
+.mypy_cache/
+.pytest_cache/
+.nyc_output/
+coverage/
+
+# Distribution / packaging
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Compiled Binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Debug / profiling
+*.log
+*.trace
+!README.md
+!*.json
+!*.md
+!*.yml
+!*.yaml
+!*.toml
+!*.cfg
+!*.ini
+```
