@@ -1,22 +1,29 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, User, Heart, ShoppingBag, Menu, X, ChevronDown, Instagram, Facebook, Youtube } from 'lucide-react';
-import { useStore, useCart, useWishlist } from '../store/StoreContext';
+import { useStore } from '@nanostores/react';
+import { isCartOpen, isMobileMenuOpen, isSearchOpen, toggleCart, toggleMobileMenu, toggleSearch, closeAllOverlays } from '../store/uiStore';
+import { cartStore, getCartItems, getTotalItems, getSubtotal, updateQuantity, removeFromCart, clearCart } from '../store/cartStore';
+import { wishlistStore, getCount as getWishlistCount, toggleWishlist } from '../store/wishlistStore';
 import { products } from '../data/products';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [megaMenu, setMegaMenu] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [cartOpen, setCartOpen] = useState(false);
-  const location = useLocation();
-  const { totalItems } = useCart();
-  const { count: wishlistCount } = useWishlist();
-  const { dispatch, state } = useStore();
   const searchRef = useRef<HTMLInputElement>(null);
+  
+  // Subscribe to Nano Stores
+  const $isCartOpen = useStore(isCartOpen);
+  const $isMobileMenuOpen = useStore(isMobileMenuOpen);
+  const $isSearchOpen = useStore(isSearchOpen);
+  const cart = useStore(cartStore);
+  const wishlist = useStore(wishlistStore);
+  
+  // Derived values
+  const totalItems = getTotalItems();
+  const wishlistCount = getWishlistCount();
+  const items = getCartItems();
+  const subtotal = getSubtotal();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -24,11 +31,9 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => { setMobileOpen(false); setMegaMenu(false); setSearchOpen(false); }, [location]);
-
   useEffect(() => {
-    if (searchOpen && searchRef.current) searchRef.current.focus();
-  }, [searchOpen]);
+    if ($isSearchOpen && searchRef.current) searchRef.current.focus();
+  }, [$isSearchOpen]);
 
   const searchResults = searchQuery.length > 1
     ? products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.category.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 5)
@@ -57,57 +62,53 @@ export default function Header() {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Mobile Menu Button */}
-            <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2" aria-label="Open menu">
+            <button onClick={() => toggleMobileMenu()} className="lg:hidden p-2" aria-label="Open menu">
               <Menu size={22} className={scrolled ? 'text-obsidian' : 'text-white/90'} />
             </button>
 
             {/* Navigation - Desktop */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.slice(0, 4).map(link => (
-                <div key={link.path} className="relative"
-                  onMouseEnter={() => link.hasMega && setMegaMenu(true)}
-                  onMouseLeave={() => setMegaMenu(false)}>
-                  <Link to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
-                    {link.label}
-                    {link.hasMega && <ChevronDown size={12} className="inline ml-1" />}
-                  </Link>
-                </div>
+                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
+                  {link.label}
+                  {link.hasMega && <ChevronDown size={12} className="inline ml-1" />}
+                </a>
               ))}
             </nav>
 
             {/* Logo */}
-            <Link to="/" className="absolute left-1/2 -translate-x-1/2 lg:relative lg:left-0 lg:translate-x-0">
+            <a href="/" className="absolute left-1/2 -translate-x-1/2 lg:relative lg:left-0 lg:translate-x-0">
               <h1 className={`font-serif text-2xl lg:text-3xl tracking-[0.3em] font-light transition-colors duration-300 ${scrolled ? 'text-obsidian' : 'text-white'}`} style={!scrolled ? { textShadow: '0 1px 3px rgba(0,0,0,0.4)' } : {}}>
                 SURAKURI
               </h1>
-            </Link>
+            </a>
 
             {/* Right Navigation */}
             <nav className="hidden lg:flex items-center gap-6">
               {navLinks.slice(4).map(link => (
-                <Link key={link.path} to={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
+                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
                   {link.label}
-                </Link>
+                </a>
               ))}
             </nav>
 
             {/* Icons */}
             <div className="flex items-center gap-4">
-              <button onClick={() => setSearchOpen(true)} className={`p-2 transition-colors ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Search">
+              <button onClick={() => toggleSearch()} className={`p-2 transition-colors ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Search">
                 <Search size={18} />
               </button>
-              <Link to="/account" className={`p-2 transition-colors hidden sm:block ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Account">
+              <a href="/account" className={`p-2 transition-colors hidden sm:block ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Account">
                 <User size={18} />
-              </Link>
-              <Link to="/wishlist" className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Wishlist">
+              </a>
+              <a href="/wishlist" className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Wishlist">
                 <Heart size={18} />
                 {wishlistCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">
                     {wishlistCount}
                   </span>
                 )}
-              </Link>
-              <button onClick={() => setCartOpen(true)} className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Cart">
+              </a>
+              <button onClick={() => toggleCart()} className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Cart">
                 <ShoppingBag size={18} />
                 {totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">
@@ -119,8 +120,8 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mega Menu */}
-        <AnimatePresence>
+        {/* Mega Menu - Disabled for now, needs state management */}
+        {/* <AnimatePresence>
           {megaMenu && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -134,7 +135,7 @@ export default function Header() {
                   <h3 className="font-serif text-lg mb-4">Collections</h3>
                   <ul className="space-y-2">
                     {['Signature', 'Heritage', 'Essentials', 'Sport'].map(c => (
-                      <li key={c}><Link to={`/collections/${c.toLowerCase()}`} className="text-sm text-warm-gray hover:text-obsidian transition-colors">{c}</Link></li>
+                      <li key={c}><a href={`/collections/${c.toLowerCase()}`} className="text-sm text-warm-gray hover:text-obsidian transition-colors">{c}</a></li>
                     ))}
                   </ul>
                 </div>
@@ -142,46 +143,46 @@ export default function Header() {
                   <h3 className="font-serif text-lg mb-4">Categories</h3>
                   <ul className="space-y-2">
                     {['Automatic', 'Chronograph', 'Dress', 'Diver', 'Skeleton', 'GMT'].map(c => (
-                      <li key={c}><Link to={`/shop?category=${c.toLowerCase()}`} className="text-sm text-warm-gray hover:text-obsidian transition-colors">{c}</Link></li>
+                      <li key={c}><a href={`/shop?category=${c.toLowerCase()}`} className="text-sm text-warm-gray hover:text-obsidian transition-colors">{c}</a></li>
                     ))}
                   </ul>
                 </div>
                 <div>
                   <h3 className="font-serif text-lg mb-4">Featured</h3>
                   <ul className="space-y-2">
-                    <li><Link to="/new-arrivals" className="text-sm text-warm-gray hover:text-obsidian transition-colors">New Arrivals</Link></li>
-                    <li><Link to="/best-sellers" className="text-sm text-warm-gray hover:text-obsidian transition-colors">Best Sellers</Link></li>
-                    <li><Link to="/shop" className="text-sm text-warm-gray hover:text-obsidian transition-colors">Limited Edition</Link></li>
+                    <li><a href="/new-arrivals" className="text-sm text-warm-gray hover:text-obsidian transition-colors">New Arrivals</a></li>
+                    <li><a href="/best-sellers" className="text-sm text-warm-gray hover:text-obsidian transition-colors">Best Sellers</a></li>
+                    <li><a href="/shop" className="text-sm text-warm-gray hover:text-obsidian transition-colors">Limited Edition</a></li>
                   </ul>
                 </div>
                 <div className="bg-cream rounded-lg p-6">
                   <p className="font-serif text-lg mb-2">The Sovereign Collection</p>
                   <p className="text-xs text-warm-gray mb-4">Discover our most coveted timepieces</p>
-                  <Link to="/shop" className="text-[10px] tracking-[0.2em] uppercase border-b border-obsidian pb-0.5">Explore</Link>
+                  <a href="/shop" className="text-[10px] tracking-[0.2em] uppercase border-b border-obsidian pb-0.5">Explore</a>
                 </div>
               </div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> --> */}
       </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {$isMobileMenuOpen && (
           <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'tween', duration: 0.3 }}
             className="fixed inset-0 z-[60] bg-ivory">
             <div className="p-6">
               <div className="flex justify-between items-center mb-12">
-                <span className="font-serif text-2xl tracking-[0.3em]">AURELIS</span>
-                <button onClick={() => setMobileOpen(false)} aria-label="Close menu"><X size={24} /></button>
+                <span className="font-serif text-2xl tracking-[0.3em]">SURAKURI</span>
+                <button onClick={() => toggleMobileMenu()} aria-label="Close menu"><X size={24} /></button>
               </div>
               <nav className="space-y-6">
                 {navLinks.map(link => (
-                  <Link key={link.path} to={link.path} className="block text-xl font-serif tracking-wide">{link.label}</Link>
+                  <a key={link.path} href={link.path} className="block text-xl font-serif tracking-wide">{link.label}</a>
                 ))}
                 <hr className="border-gray-200" />
-                <Link to="/account" className="block text-sm text-warm-gray">My Account</Link>
-                <Link to="/wishlist" className="block text-sm text-warm-gray">Wishlist ({wishlistCount})</Link>
+                <a href="/account" className="block text-sm text-warm-gray">My Account</a>
+                <a href="/wishlist" className="block text-sm text-warm-gray">Wishlist ({wishlistCount})</a>
               </nav>
             </div>
           </motion.div>
@@ -190,7 +191,7 @@ export default function Header() {
 
       {/* Search Overlay */}
       <AnimatePresence>
-        {searchOpen && (
+        {$isSearchOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[70] bg-ivory/98 backdrop-blur-sm">
             <div className="max-w-3xl mx-auto pt-32 px-6">
@@ -203,25 +204,25 @@ export default function Header() {
                   placeholder="Search timepieces, collections..."
                   className="flex-1 bg-transparent text-2xl font-serif outline-none placeholder:text-warm-gray"
                 />
-                <button onClick={() => { setSearchOpen(false); setSearchQuery(''); }} aria-label="Close search"><X size={24} /></button>
+                <button onClick={() => { toggleSearch(); setSearchQuery(''); }} aria-label="Close search"><X size={24} /></button>
               </div>
 
               {searchResults.length > 0 && (
                 <div className="mt-8 space-y-4">
                   {searchResults.map(p => (
-                    <Link key={p.id} to={`/product/${p.slug}`} onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                    <a key={p.id} href={`/product/${p.slug}`} onClick={() => { toggleSearch(); setSearchQuery(''); }}
                       className="flex items-center gap-4 p-3 hover:bg-cream rounded-lg transition-colors">
                       <img src={p.images[0]} alt={p.name} className="w-16 h-16 object-cover rounded" />
                       <div>
                         <p className="font-medium">{p.name}</p>
                         <p className="text-sm text-warm-gray">{p.category} — ${p.price.toLocaleString()}</p>
                       </div>
-                    </Link>
+                    </a>
                   ))}
-                  <Link to={`/shop?q=${searchQuery}`} onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                  <a href={`/shop?q=${searchQuery}`} onClick={() => { toggleSearch(); setSearchQuery(''); }}
                     className="block text-center text-sm tracking-[0.15em] uppercase mt-6 border-b border-obsidian pb-1 w-fit mx-auto">
                     View All Results
-                  </Link>
+                  </a>
                 </div>
               )}
 
@@ -236,16 +237,6 @@ export default function Header() {
                       </button>
                     ))}
                   </div>
-                  {state.searchHistory.length > 0 && (
-                    <div className="mt-6">
-                      <p className="text-xs tracking-[0.2em] uppercase text-warm-gray mb-4">Recent</p>
-                      <div className="flex flex-wrap gap-2">
-                        {state.searchHistory.map(s => (
-                          <button key={s} onClick={() => setSearchQuery(s)} className="px-4 py-2 bg-cream rounded-full text-sm">{s}</button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -254,13 +245,14 @@ export default function Header() {
       </AnimatePresence>
 
       {/* Cart Drawer */}
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <CartDrawer open={$isCartOpen} onClose={toggleCart} />
     </>
   );
 }
 
 function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { items, subtotal, dispatch } = useCart();
+  const items = getCartItems();
+  const subtotal = getSubtotal();
   const freeShippingThreshold = 5000;
   const remaining = Math.max(0, freeShippingThreshold - subtotal);
 
@@ -298,7 +290,7 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <ShoppingBag size={48} className="mx-auto text-warm-gray mb-4" />
                   <p className="font-serif text-lg mb-2">Your bag is empty</p>
                   <p className="text-sm text-warm-gray mb-6">Discover a timepiece worthy of the moments ahead.</p>
-                  <Link to="/shop" onClick={onClose} className="text-xs tracking-[0.2em] uppercase border-b border-obsidian pb-1">Explore Watches</Link>
+                  <a href="/shop" onClick={onClose} className="text-xs tracking-[0.2em] uppercase border-b border-obsidian pb-1">Explore Watches</a>
                 </div>
               ) : (
                 items.map(item => (
@@ -308,16 +300,16 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                       <p className="text-xs text-warm-gray">{item.product.brand}</p>
                       <p className="font-medium text-sm">{item.product.name}</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <button onClick={() => dispatch({ type: 'UPDATE_QUANTITY', productId: item.product.id, quantity: item.quantity - 1 })}
+                        <button onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
                           className="w-6 h-6 border border-gray-200 rounded flex items-center justify-center text-xs">−</button>
                         <span className="text-sm w-4 text-center">{item.quantity}</span>
-                        <button onClick={() => dispatch({ type: 'UPDATE_QUANTITY', productId: item.product.id, quantity: item.quantity + 1 })}
+                        <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
                           className="w-6 h-6 border border-gray-200 rounded flex items-center justify-center text-xs">+</button>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium">${(item.product.price * item.quantity).toLocaleString()}</p>
-                      <button onClick={() => dispatch({ type: 'REMOVE_FROM_CART', productId: item.product.id })}
+                      <button onClick={() => removeFromCart(item.product.id)}
                         className="text-xs text-warm-gray hover:text-red-500 mt-2">Remove</button>
                     </div>
                   </div>
@@ -332,14 +324,14 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <span className="text-sm">Subtotal</span>
                   <span className="font-medium">${subtotal.toLocaleString()}</span>
                 </div>
-                <Link to="/checkout" onClick={onClose}
+                <a href="/checkout" onClick={onClose}
                   className="block w-full bg-obsidian text-ivory text-center py-4 text-xs tracking-[0.2em] uppercase hover:bg-charcoal transition-colors">
                   Checkout
-                </Link>
-                <Link to="/cart" onClick={onClose}
+                </a>
+                <a href="/cart" onClick={onClose}
                   className="block w-full border border-obsidian text-center py-4 text-xs tracking-[0.2em] uppercase hover:bg-obsidian hover:text-ivory transition-colors">
                   View Cart
-                </Link>
+                </a>
               </div>
             )}
           </motion.div>
