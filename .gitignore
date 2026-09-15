@@ -1,19 +1,25 @@
-```
+```gitignore
 # Dependencies
 node_modules/
+.pnpm-store/
 
-# Build artifacts
+# Build outputs
 dist/
 build/
+.next/
+.nuxt/
+out/
+public/build/
+
+# TypeScript/JavaScript
 *.tsbuildinfo
+*.tsx.swp
 
 # Environment variables
 .env
 .env.local
 .env.*
-
-# Logs
-*.log
+!.env.example
 
 # IDE files
 .vscode/
@@ -21,59 +27,14 @@ build/
 *.swp
 *.swo
 
-# Python artifacts (if any Python files exist in project)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
-
-# Temporary files
-*.tmp
-*.temp
-
 # OS files
 .DS_Store
 Thumbs.db
 
-# Cache directories
-.cache/
-.mypy_cache/
-.pytest_cache/
-.nyc_output/
-coverage/
-
-# Distribution / packaging
-*.tar.gz
-*.zip
-*.rar
-*.7z
-
-# Compiled Binary files
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Debug / profiling
+# Logs
 *.log
-*.trace
-!README.md
-!*.json
-!*.md
-!*.yml
-!*.yaml
-!*.toml
-!*.cfg
-!*.ini
+
+# Coverage
+coverage/
+.nyc_output/
 ```
