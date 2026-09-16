@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Youtube, Send } from 'lucide-react';
 
 export default function Footer() {
@@ -47,7 +46,7 @@ export default function Footer() {
             <h3 className="text-[10px] tracking-[0.25em] uppercase mb-6 text-champagne">Shop</h3>
             <ul className="space-y-3">
               {['All Watches', 'New Arrivals', 'Best Sellers', 'Collections', "Men's", "Women's"].map(item => (
-                <li key={item}><Link to="/shop" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</Link></li>
+                <li key={item}><a href="/shop" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</a></li>
               ))}
             </ul>
           </div>
@@ -55,7 +54,7 @@ export default function Footer() {
             <h3 className="text-[10px] tracking-[0.25em] uppercase mb-6 text-champagne">Customer Care</h3>
             <ul className="space-y-3">
               {['Contact Us', 'Shipping', 'Returns', 'Warranty', 'Size Guide', 'Care Guide', 'FAQ'].map(item => (
-                <li key={item}><Link to="/about" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</Link></li>
+                <li key={item}><a href="/about" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</a></li>
               ))}
             </ul>
           </div>
@@ -63,7 +62,7 @@ export default function Footer() {
             <h3 className="text-[10px] tracking-[0.25em] uppercase mb-6 text-champagne">Company</h3>
             <ul className="space-y-3">
               {[{ label: 'About', path: '/about' }, { label: 'Our Story', path: '/about' }, { label: 'Journal', path: '/journal' }, { label: 'Careers', path: '/about' }].map(item => (
-                <li key={item.label}><Link to={item.path} className="text-sm text-soft-gray hover:text-ivory transition-colors">{item.label}</Link></li>
+                <li key={item.label}><a href={item.path} className="text-sm text-soft-gray hover:text-ivory transition-colors">{item.label}</a></li>
               ))}
             </ul>
           </div>
@@ -71,7 +70,7 @@ export default function Footer() {
             <h3 className="text-[10px] tracking-[0.25em] uppercase mb-6 text-champagne">Legal</h3>
             <ul className="space-y-3">
               {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(item => (
-                <li key={item}><Link to="/" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</Link></li>
+                <li key={item}><a href="/" className="text-sm text-soft-gray hover:text-ivory transition-colors">{item}</a></li>
               ))}
             </ul>
             <div className="flex gap-4 mt-8">
