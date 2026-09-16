@@ -4,6 +4,8 @@
 import '../index.css'; // Import your global Tailwind styles
 import Header from '../components/Header';
 import CartDrawer from '../components/CartDrawer';
+import HomePage from '../components/HomePage';
+import Footer from '../components/Footer';
 ---
 
 <html lang="en">
@@ -15,13 +17,7 @@ import CartDrawer from '../components/CartDrawer';
   <body class="bg-ivory text-obsidian min-h-screen">
     <Header client:load />
     <CartDrawer client:load />
-    <main class="text-center space-y-6 p-8 pt-32">
-      <h1 class="font-serif text-4xl tracking-[0.15em] font-light">
-        SURAKURI
-      </h1>
-      <p class="font-sans text-sm text-warm-gray uppercase tracking-[0.2em]">
-        Astro Migration Successful
-      </p>
-    </main>
+    <HomePage client:idle />
+    <Footer client:visible />
   </body>
 </html>
