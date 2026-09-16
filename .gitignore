@@ -1,1 +1,4 @@
-Nothing should be ignored in this case, as the changes only involve source code files (.tsx, .astro) without any build artifacts, dependencies, or temporary files.
+```
+# Astro development files
+.astro/
+```
