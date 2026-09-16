@@ -1,14 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Shield, Truck, Award, Clock } from 'lucide-react';
 import { products, collections } from '../data/products';
-import ProductCard from '../components/ProductCard';
-import { PromoCountdown } from '../components/MobileNav';
+import ProductCard from './ProductCard';
+import { PromoCountdown } from './MobileNav';
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     const handleScroll = () => {
       if (heroRef.current) {
@@ -98,18 +97,18 @@ export default function HomePage() {
             transition={{ duration: 0.9, delay: 1.2, ease: "easeOut" }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link
-              to="/shop"
+            <a
+              href="/shop"
               className="bg-white/95 backdrop-blur-sm text-obsidian px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-white hover:shadow-lg transition-all duration-300 border border-white/20"
             >
               Explore Collection
-            </Link>
-            <Link
-              to="/about"
+            </a>
+            <a
+              href="/about"
               className="bg-white/5 backdrop-blur-sm border border-white/30 text-white/90 px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-white/10 hover:border-white/50 transition-all duration-300"
             >
               Discover Our Story
-            </Link>
+            </a>
           </motion.div>
         </div>
 
@@ -164,9 +163,9 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/shop" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors">
+            <a href="/shop" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors">
               View All Timepieces <ArrowRight size={14} />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -204,9 +203,9 @@ export default function HomePage() {
               Our master watchmakers train for years before they are entrusted with the creation of a single
               timepiece, ensuring that every watch that bears the SURAKURI name meets our exacting standards.
             </p>
-            <Link to="/about" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors pt-4">
+            <a href="/about" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-obsidian pb-1 hover:text-champagne hover:border-champagne transition-colors pt-4">
               Our Heritage <ArrowRight size={14} />
-            </Link>
+            </a>
           </motion.div>
         </div>
       </section>
@@ -233,7 +232,7 @@ export default function HomePage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
               >
-                <Link to={`/collections/${col.slug}`} className="group block relative overflow-hidden aspect-[16/10]">
+                <a href={`/collections/${col.slug}`} className="group block relative overflow-hidden aspect-[16/10]">
                   <img src={col.image} alt={col.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -243,7 +242,7 @@ export default function HomePage() {
                       Discover <ArrowRight size={12} />
                     </span>
                   </div>
-                </Link>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -270,9 +269,9 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/new-arrivals" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-ivory/40 pb-1 hover:text-champagne hover:border-champagne transition-colors">
+            <a href="/new-arrivals" className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-ivory/40 pb-1 hover:text-champagne hover:border-champagne transition-colors">
               View All New Arrivals <ArrowRight size={14} />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -299,9 +298,9 @@ export default function HomePage() {
             <p className="text-white/70 max-w-lg mx-auto mb-8 leading-[1.7]" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
               Only a select few will own these masterpieces. Each piece is individually numbered and comes with a certificate of authenticity.
             </p>
-            <Link to="/shop?badge=limited" className="inline-block bg-champagne/95 backdrop-blur-sm text-obsidian px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-champagne hover:shadow-lg transition-all duration-300 border border-champagne/20">
+            <a href="/shop?badge=limited" className="inline-block bg-champagne/95 backdrop-blur-sm text-obsidian px-10 py-4 text-[11px] tracking-[0.2em] uppercase font-medium hover:bg-champagne hover:shadow-lg transition-all duration-300 border border-champagne/20">
               Discover Limited Editions
-            </Link>
+            </a>
           </motion.div>
         </div>
       </section>
@@ -359,9 +358,9 @@ export default function HomePage() {
           <p className="text-warm-gray max-w-lg mx-auto mb-8">
             Whether you seek a daily companion or a collector's treasure, discover the SURAKURI that speaks to you.
           </p>
-          <Link to="/shop" className="bg-obsidian text-ivory px-10 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-charcoal transition-colors">
+          <a href="/shop" className="inline-block bg-obsidian text-ivory px-10 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-charcoal transition-colors">
             Shop All Watches
-          </Link>
+          </a>
         </motion.div>
       </section>
     </div>
