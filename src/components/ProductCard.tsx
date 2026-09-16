@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Heart, Eye, ShoppingBag, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useStore } from '@nanostores/react';
 import { Product } from '../data/products';
-import { useStore, useWishlist } from '../store/StoreContext';
+import { addToCart } from '../store/cartStore';
+import { toggleWishlist, isInWishlist, wishlistStore } from '../store/wishlistStore';
+import { toggleCart } from '../store/uiStore';
 import { addToast } from './Shared';
 
 interface ProductCardProps {
@@ -13,24 +15,24 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index = 0, showRank = false }: ProductCardProps) {
-  const { dispatch } = useStore();
-  const { items: wishlistItems } = useWishlist();
-  const isWishlisted = wishlistItems.includes(product.id);
+  const wishlistItems = useStore(wishlistStore);
+  const isWishlisted = isInWishlist(product.id);
   const [imgIndex, setImgIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch({ type: 'ADD_TO_CART', product });
-    addToast(dispatch, `${product.name} added to bag`);
+    addToCart(product, 1);
+    toggleCart();
+    addToast(null, `${product.name} added to bag`);
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch({ type: 'TOGGLE_WISHLIST', productId: product.id });
-    addToast(dispatch, isWishlisted ? 'Removed from wishlist' : 'Added to wishlist', 'info');
+    toggleWishlist(product.id);
+    addToast(null, isWishlisted ? 'Removed from wishlist' : 'Added to wishlist', 'info');
   };
 
   return (
@@ -66,7 +68,7 @@ export default function ProductCard({ product, index = 0, showRank = false }: Pr
       </div>
 
       {/* Image */}
-      <Link to={`/product/${product.slug}`} className="block relative overflow-hidden bg-cream aspect-[3/4]">
+      <a href={`/product/${product.slug}`} className="block relative overflow-hidden bg-cream aspect-[3/4]">
         <img
           src={product.images[imgIndex]}
           alt={product.name}
@@ -81,19 +83,19 @@ export default function ProductCard({ product, index = 0, showRank = false }: Pr
             className="bg-ivory text-obsidian p-3 rounded-full shadow-lg hover:bg-champagne transition-colors" aria-label="Add to cart">
             <ShoppingBag size={16} />
           </button>
-          <Link to={`/product/${product.slug}`}
+          <a href={`/product/${product.slug}`}
             className="bg-ivory text-obsidian p-3 rounded-full shadow-lg hover:bg-champagne transition-colors" aria-label="Quick view">
             <Eye size={16} />
-          </Link>
+          </a>
           <button onClick={handleToggleWishlist}
             className={`p-3 rounded-full shadow-lg transition-colors ${isWishlisted ? 'bg-red-50 text-red-500' : 'bg-ivory text-obsidian hover:bg-champagne'}`} aria-label="Wishlist">
             <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
           </button>
         </div>
-      </Link>
+      </a>
 
       {/* Info */}
-      <Link to={`/product/${product.slug}`} className="block mt-4 space-y-1">
+      <a href={`/product/${product.slug}`} className="block mt-4 space-y-1">
         <p className="text-[10px] tracking-[0.2em] uppercase text-warm-gray">{product.brand}</p>
         <h3 className="font-medium text-sm group-hover:text-champagne transition-colors">{product.name}</h3>
         <div className="flex items-center gap-1">
@@ -106,7 +108,7 @@ export default function ProductCard({ product, index = 0, showRank = false }: Pr
             <span className="text-xs text-warm-gray line-through">${product.compareAtPrice.toLocaleString()}</span>
           )}
         </div>
-      </Link>
+      </a>
     </motion.div>
   );
 }
