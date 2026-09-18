@@ -1,6 +1,6 @@
  import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { map } from 'nanostores';
+import { atom } from 'nanostores';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -12,10 +12,10 @@ export interface Toast {
 }
 
 // Local nano store for toasts
-export const toastStore = map<Toast[]>([]);
+export const toastStore = atom<Toast[]>([]);
 
 // Local nano store for newsletter popup shown state
-export const newsletterShownStore = map<boolean>(false);
+export const newsletterShownStore = atom<boolean>(false);
 
 // Add a toast
 export function addToast(_dispatch: null, message: string, type: 'success' | 'error' | 'info' = 'success') {
@@ -161,3 +161,7 @@ export function ProductCardSkeleton() {
       <SkeletonLoader className="aspect-[3/4] w-full" />
       <SkeletonLoader className="h-4 w-3/4" />
       <SkeletonLoader className="h-3 w-1/2" />
+
+    </div>
+  );
+}
