@@ -2,3 +2,9 @@
 # Astro development files
 .astro/
 ```
+# Dependencies & Build Cache
+node_modules/
+.astro/
+dist/
+.vite/
+*.log
