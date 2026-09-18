@@ -1,24 +1,48 @@
-import { useEffect, useState } from 'react';
-import { useStore } from '../store/StoreContext';
+ import { useEffect, useState } from 'react';
+import { useStore } from '@nanostores/react';
+import { map } from 'nanostores';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Toast types
+export interface Toast {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
+// Local nano store for toasts
+export const toastStore = map<Toast[]>([]);
+
+// Local nano store for newsletter popup shown state
+export const newsletterShownStore = map<boolean>(false);
+
+// Add a toast
+export function addToast(_dispatch: null, message: string, type: 'success' | 'error' | 'info' = 'success') {
+  const id = Date.now().toString();
+  const current = toastStore.get();
+  toastStore.set([...current, { id, message, type }]);
+  
+  // Auto-remove after 4 seconds
+  setTimeout(() => {
+    const toasts = toastStore.get();
+    toastStore.set(toasts.filter(t => t.id !== id));
+  }, 4000);
+}
+
+// Remove a toast
+export function removeToast(id: string) {
+  const toasts = toastStore.get();
+  toastStore.set(toasts.filter(t => t.id !== id));
+}
+
 export function ToastContainer() {
-  const { state, dispatch } = useStore();
-
-  useEffect(() => {
-    if (state.toasts.length > 0) {
-      const timer = setTimeout(() => {
-        dispatch({ type: 'REMOVE_TOAST', id: state.toasts[0].id });
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [state.toasts, dispatch]);
-
+  const toasts = useStore(toastStore);
+  
   return (
     <div className="fixed bottom-6 right-6 z-[100] space-y-3">
       <AnimatePresence>
-        {state.toasts.map(toast => (
+        {toasts.map(toast => (
           <motion.div
             key={toast.id}
             initial={{ opacity: 0, x: 50, scale: 0.95 }}
@@ -30,7 +54,7 @@ export function ToastContainer() {
             {toast.type === 'error' && <AlertCircle size={18} className="text-red-400 shrink-0" />}
             {toast.type === 'info' && <Info size={18} className="text-blue-400 shrink-0" />}
             <p className="text-sm flex-1">{toast.message}</p>
-            <button onClick={() => dispatch({ type: 'REMOVE_TOAST', id: toast.id })} className="shrink-0 hover:text-champagne">
+            <button onClick={() => removeToast(toast.id)} className="shrink-0 hover:text-champagne">
               <X size={14} />
             </button>
           </motion.div>
@@ -40,27 +64,22 @@ export function ToastContainer() {
   );
 }
 
-export function addToast(dispatch: React.Dispatch<any>, message: string, type: 'success' | 'error' | 'info' = 'success') {
-  const id = Date.now().toString();
-  dispatch({ type: 'ADD_TOAST', toast: { id, message, type } });
-}
-
 export function NewsletterPopup() {
-  const { state, dispatch } = useStore();
+  const newsletterShown = useStore(newsletterShownStore);
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    if (state.newsletterPopupShown) return;
+    if (newsletterShown) return;
     const timer = setTimeout(() => setShow(true), 30000);
     return () => clearTimeout(timer);
-  }, [state.newsletterPopupShown]);
+  }, [newsletterShown]);
 
   if (!show) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch({ type: 'SET_NEWSLETTER_SHOWN' });
+    newsletterShownStore.set(true);
     setShow(false);
   };
 
@@ -70,7 +89,7 @@ export function NewsletterPopup() {
       animate={{ opacity: 1, scale: 1 }}
       className="fixed bottom-6 left-6 z-[90] bg-ivory shadow-2xl rounded-lg p-8 max-w-sm border border-gray-100"
     >
-      <button onClick={() => { dispatch({ type: 'SET_NEWSLETTER_SHOWN' }); setShow(false); }}
+      <button onClick={() => { newsletterShownStore.set(true); setShow(false); }}
         className="absolute top-4 right-4 text-warm-gray hover:text-obsidian">
         <X size={16} />
       </button>
@@ -142,7 +161,3 @@ export function ProductCardSkeleton() {
       <SkeletonLoader className="aspect-[3/4] w-full" />
       <SkeletonLoader className="h-4 w-3/4" />
       <SkeletonLoader className="h-3 w-1/2" />
-      <SkeletonLoader className="h-4 w-1/3" />
-    </div>
-  );
-}
