@@ -1,12 +1,34 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useStore } from '@nanostores/react';
 import { Home, Search, Heart, ShoppingBag, User } from 'lucide-react';
-import { useCart, useWishlist } from '../store/StoreContext';
+import { cartStore, getTotalItems } from '../store/cartStore';
+import { wishlistStore, getCount as getWishlistCount } from '../store/wishlistStore';
 
 export default function MobileNav() {
-  const location = useLocation();
-  const { totalItems } = useCart();
-  const { count: wishlistCount } = useWishlist();
+  const cart = useStore(cartStore);
+  const wishlist = useStore(wishlistStore);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  const totalItems = getTotalItems();
+  const wishlistCount = getWishlistCount();
+
+  // Update current path on navigation (for Astro page transitions)
+  useEffect(() => {
+    const handleNavigation = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    // Listen for Astro's page navigation
+    document.addEventListener('astro:after-swap', handleNavigation);
+
+    // Also listen for popstate for browser back/forward
+    window.addEventListener('popstate', handleNavigation);
+
+    return () => {
+      document.removeEventListener('astro:after-swap', handleNavigation);
+      window.removeEventListener('popstate', handleNavigation);
+    };
+  }, []);
 
   const links = [
     { path: '/', icon: Home, label: 'Home' },
@@ -20,15 +42,15 @@ export default function MobileNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-[60] bg-ivory/95 backdrop-blur-md border-t border-gray-100 lg:hidden safe-area-pb">
       <div className="flex items-center justify-around py-2">
         {links.map(({ path, icon: Icon, label, badge }) => (
-          <Link
+          <a
             key={path}
-            to={path}
+            href={path}
             className={`flex flex-col items-center gap-0.5 px-3 py-1 relative ${
-              location.pathname === path ? 'text-obsidian' : 'text-warm-gray'
+              currentPath === path ? 'text-obsidian' : 'text-warm-gray'
             }`}
           >
             <div className="relative">
-              <Icon size={20} strokeWidth={location.pathname === path ? 2 : 1.5} />
+              <Icon size={20} strokeWidth={currentPath === path ? 2 : 1.5} />
               {badge && badge > 0 ? (
                 <span className="absolute -top-1.5 -right-2 bg-champagne text-obsidian text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold">
                   {badge}
@@ -36,10 +58,10 @@ export default function MobileNav() {
               ) : null}
             </div>
             <span className="text-[9px] tracking-wider">{label}</span>
-            {location.pathname === path && (
+            {currentPath === path && (
               <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-champagne rounded-full" />
             )}
-          </Link>
+          </a>
         ))}
       </div>
     </nav>

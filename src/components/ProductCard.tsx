@@ -3,10 +3,12 @@ import { Heart, Eye, ShoppingBag, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { Product } from '../data/products';
+import { addToast } from './Shared';
+
+// Restored Nano Store connections
 import { addToCart } from '../store/cartStore';
 import { toggleWishlist, isInWishlist, wishlistStore } from '../store/wishlistStore';
 import { toggleCart } from '../store/uiStore';
-import { addToast } from './Shared';
 
 interface ProductCardProps {
   product: Product;

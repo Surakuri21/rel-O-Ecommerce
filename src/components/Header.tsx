@@ -1,11 +1,38 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, User, Heart, ShoppingBag, Menu, X, ChevronDown, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Search, User, Heart, ShoppingBag, Menu, X, ChevronDown, Instagram, Facebook, Youtube, Sun, Moon } from 'lucide-react';
 import { useStore } from '@nanostores/react';
+import { atom } from 'nanostores';
 import { isCartOpen, isMobileMenuOpen, isSearchOpen, toggleCart, toggleMobileMenu, toggleSearch, closeAllOverlays } from '../store/uiStore';
 import { cartStore, getCartItems, getTotalItems, getSubtotal, updateQuantity, removeFromCart, clearCart } from '../store/cartStore';
 import { wishlistStore, getCount as getWishlistCount, toggleWishlist } from '../store/wishlistStore';
 import { products } from '../data/products';
+
+// Dark mode store — persists to localStorage
+export const isDarkMode = atom<boolean>(false);
+
+isDarkMode.subscribe((dark) => {
+  if (typeof window !== 'undefined') {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }
+});
+
+// Initialize theme from localStorage
+if (typeof window !== 'undefined') {
+  const savedTheme = localStorage.getItem('theme');
+  isDarkMode.set(savedTheme === 'dark');
+}
+
+// Exported toggle for convenience
+export function toggleTheme() {
+  isDarkMode.set(!isDarkMode.get());
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,6 +43,7 @@ export default function Header() {
   const $isCartOpen = useStore(isCartOpen);
   const $isMobileMenuOpen = useStore(isMobileMenuOpen);
   const $isSearchOpen = useStore(isSearchOpen);
+  const $isDarkMode = useStore(isDarkMode);
   const cart = useStore(cartStore);
   const wishlist = useStore(wishlistStore);
   
@@ -50,43 +78,54 @@ export default function Header() {
     { label: 'Journal', path: '/journal' },
   ];
 
+  const headerClasses = scrolled
+    ? 'bg-ivory/95 backdrop-blur-md shadow-sm dark:bg-obsidian/95'
+    : 'bg-black/20 backdrop-blur-[10px] border-b border-white/5 dark:bg-obsidian/95 dark:border-white/5';
+
+  const textClass = scrolled ? 'text-obsidian dark:text-ivory' : 'text-white/90 hover:text-white dark:text-white/90 dark:hover:text-white';
+  const textClassSolid = scrolled ? 'text-obsidian dark:text-ivory' : 'text-white dark:text-white';
+
   return (
     <>
       {/* Announcement Bar */}
-      <div className="bg-obsidian/95 backdrop-blur-sm text-ivory/90 text-center py-2 text-[10px] tracking-[0.25em] uppercase font-sans border-b border-white/5">
+      <div className="bg-obsidian text-ivory/90 text-center py-2 text-[10px] tracking-[0.25em] uppercase font-sans border-b border-white/5">
         Complimentary Express Shipping — Orders Over $5,000
       </div>
 
       {/* Main Header */}
-      <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-ivory/95 backdrop-blur-md shadow-sm' : 'bg-black/20 backdrop-blur-[10px] border-b border-white/5'}`}>
+      <header className={`fixed top-8 left-0 right-0 z-50 transition-all duration-500 ${headerClasses}`}>
         <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Mobile Menu Button */}
-            <button onClick={() => toggleMobileMenu()} className="lg:hidden p-2" aria-label="Open menu">
-              <Menu size={22} className={scrolled ? 'text-obsidian' : 'text-white/90'} />
-            </button>
+            {/* Mobile Menu Button + Logo (left section) */}
+            <div className="flex items-center gap-4">
+              <button onClick={() => toggleMobileMenu()} className="lg:hidden p-2" aria-label="Open menu">
+                <Menu size={22} className={textClassSolid} />
+              </button>
 
-            {/* Navigation - Desktop */}
+              {/* Brand Logo */}
+              <a href="/" className="flex items-center gap-2">
+                <img
+                  src="{$isDarkMode ? '/logo-white.svg' : '/logo.svg'}"
+                  alt="SURAKURI"
+                  className="h-8 w-auto"
+                />
+              </a>
+            </div>
+
+            {/* Navigation - Desktop (Rubric #8: hidden on mobile) */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.slice(0, 4).map(link => (
-                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
+                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${textClass}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
                   {link.label}
                   {link.hasMega && <ChevronDown size={12} className="inline ml-1" />}
                 </a>
               ))}
             </nav>
 
-            {/* Logo */}
-            <a href="/" className="absolute left-1/2 -translate-x-1/2 lg:relative lg:left-0 lg:translate-x-0">
-              <h1 className={`font-serif text-2xl lg:text-3xl tracking-[0.3em] font-light transition-colors duration-300 ${scrolled ? 'text-obsidian' : 'text-white'}`} style={!scrolled ? { textShadow: '0 1px 3px rgba(0,0,0,0.4)' } : {}}>
-                SURAKURI
-              </h1>
-            </a>
-
             {/* Right Navigation */}
             <nav className="hidden lg:flex items-center gap-6">
               {navLinks.slice(4).map(link => (
-                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${scrolled ? 'text-obsidian' : 'text-white/90 hover:text-white'}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
+                <a key={link.path} href={link.path} className={`text-[11px] tracking-[0.15em] uppercase font-medium transition-all duration-300 hover:text-champagne ${textClass}`} style={!scrolled ? { textShadow: '0 1px 2px rgba(0,0,0,0.3)' } : {}}>
                   {link.label}
                 </a>
               ))}
@@ -94,13 +133,13 @@ export default function Header() {
 
             {/* Icons */}
             <div className="flex items-center gap-4">
-              <button onClick={() => toggleSearch()} className={`p-2 transition-colors ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Search">
+              <button onClick={() => toggleSearch()} className={`p-2 transition-colors ${textClass}`} aria-label="Search">
                 <Search size={18} />
               </button>
-              <a href="/account" className={`p-2 transition-colors hidden sm:block ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Account">
+              <a href="/account" className={`p-2 transition-colors hidden sm:block ${textClass}`} aria-label="Account">
                 <User size={18} />
               </a>
-              <a href="/wishlist" className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Wishlist">
+              <a href="/wishlist" className={`p-2 transition-colors relative ${textClass}`} aria-label="Wishlist">
                 <Heart size={18} />
                 {wishlistCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">
@@ -108,13 +147,22 @@ export default function Header() {
                   </span>
                 )}
               </a>
-              <button onClick={() => toggleCart()} className={`p-2 transition-colors relative ${scrolled ? 'hover:text-champagne' : 'text-white/90 hover:text-white'}`} aria-label="Cart">
+              <button onClick={() => toggleCart()} className={`p-2 transition-colors relative ${textClass}`} aria-label="Cart">
                 <ShoppingBag size={18} />
                 {totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-champagne text-obsidian text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-semibold">
                     {totalItems}
                   </span>
                 )}
+              </button>
+
+              {/* Dark/Light mode toggle (Rubric #3) */}
+              <button
+                onClick={() => isDarkMode.set(!isDarkMode.get())}
+                className={`p-2 transition-colors ${textClass}`}
+                aria-label={isDarkMode.get() ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode.get() ? <Sun size={18} /> : <Moon size={18} />}
               </button>
             </div>
           </div>
@@ -170,7 +218,7 @@ export default function Header() {
       <AnimatePresence>
         {$isMobileMenuOpen && (
           <motion.div initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-ivory">
+            className="fixed inset-0 z-[60] bg-ivory dark:bg-obsidian">
             <div className="p-6">
               <div className="flex justify-between items-center mb-12">
                 <span className="font-serif text-2xl tracking-[0.3em]">SURAKURI</span>
@@ -178,11 +226,11 @@ export default function Header() {
               </div>
               <nav className="space-y-6">
                 {navLinks.map(link => (
-                  <a key={link.path} href={link.path} className="block text-xl font-serif tracking-wide">{link.label}</a>
+                  <a key={link.path} href={link.path} className="block text-xl font-serif tracking-wide dark:text-ivory">{link.label}</a>
                 ))}
-                <hr className="border-gray-200" />
-                <a href="/account" className="block text-sm text-warm-gray">My Account</a>
-                <a href="/wishlist" className="block text-sm text-warm-gray">Wishlist ({wishlistCount})</a>
+                <hr className="border-gray-200 dark:border-gray-700" />
+                <a href="/account" className="block text-sm text-warm-gray dark:text-warm-gray">My Account</a>
+                <a href="/wishlist" className="block text-sm text-warm-gray dark:text-warm-gray">Wishlist ({wishlistCount})</a>
               </nav>
             </div>
           </motion.div>
@@ -193,7 +241,7 @@ export default function Header() {
       <AnimatePresence>
         {$isSearchOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] bg-ivory/98 backdrop-blur-sm">
+            className="fixed inset-0 z-[70] bg-ivory/98 backdrop-blur-sm dark:bg-obsidian/98">
             <div className="max-w-3xl mx-auto pt-32 px-6">
               <div className="flex items-center gap-4 border-b-2 border-obsidian pb-4">
                 <Search size={24} />
@@ -202,7 +250,7 @@ export default function Header() {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   placeholder="Search timepieces, collections..."
-                  className="flex-1 bg-transparent text-2xl font-serif outline-none placeholder:text-warm-gray"
+                  className="flex-1 bg-transparent text-2xl font-serif outline-none placeholder:text-warm-gray dark:text-ivory"
                 />
                 <button onClick={() => { toggleSearch(); setSearchQuery(''); }} aria-label="Close search"><X size={24} /></button>
               </div>
@@ -232,7 +280,7 @@ export default function Header() {
                   <div className="flex flex-wrap gap-2">
                     {['Automatic', 'Chronograph', 'Limited Edition', 'Gold', 'New Arrivals'].map(s => (
                       <button key={s} onClick={() => setSearchQuery(s)}
-                        className="px-4 py-2 border border-gray-200 rounded-full text-sm hover:border-champagne hover:text-champagne transition-colors">
+                        className="px-4 py-2 border border-gray-200 rounded-full text-sm hover:border-champagne hover:text-champagne transition-colors dark:border-gray-700">
                         {s}
                       </button>
                     ))}

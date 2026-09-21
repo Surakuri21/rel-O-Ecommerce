@@ -6,6 +6,13 @@ import Header from '../components/Header';
 import CartDrawer from '../components/CartDrawer';
 import HomePage from '../components/HomePage';
 import Footer from '../components/Footer';
+import ProductGrid from '../components/ProductGrid';
+import { products, collections } from '../data/products';
+
+// Pre-select product data for client:visible hydration
+const featuredProducts = products.filter(p => p.badges.includes('bestseller')).slice(0, 4);
+const newArrivals = products.filter(p => p.badges.includes('new')).slice(0, 4);
+const limitedEdition = products.filter(p => p.badges.includes('limited')).slice(0, 3);
 ---
 
 <html lang="en">
@@ -18,6 +25,27 @@ import Footer from '../components/Footer';
     <Header client:load />
     <CartDrawer client:load />
     <HomePage client:idle />
-    <Footer client:visible />
+    
+    <!-- Product Grids hydrated when scrolled into view -->
+    <ProductGrid 
+      title="The Art of Time" 
+      subtitle="Curated Selection" 
+      tag="champagne"
+      products={featuredProducts}
+      viewAllHref="/shop"
+      viewAllLabel="View All Timepieces"
+      client:visible 
+    />
+    
+    <ProductGrid 
+      title="New Arrivals" 
+      subtitle="Just Arrived" 
+      tag="champagne"
+      products={newArrivals}
+      viewAllHref="/new-arrivals"
+      viewAllLabel="View All New Arrivals"
+      bgClass="bg-obsidian text-ivory"
+      client:visible 
+    />
   </body>
 </html>
